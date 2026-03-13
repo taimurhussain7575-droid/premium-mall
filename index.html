@@ -9,15 +9,19 @@ header{background:black;padding:15px;text-align:center;font-size:28px;border-bot
 nav{background:#111;padding:10px;text-align:center}
 nav a{color:gold;margin:10px;text-decoration:none;font-size:18px}
 .container{display:flex;flex-wrap:wrap;justify-content:center}
-.product{border:1px solid gold;margin:15px;padding:15px;width:200px;text-align:center}
-button{background:gold;color:black;padding:8px;border:none;cursor:pointer}
+.product{border:1px solid gold;margin:15px;padding:15px;width:200px;text-align:center;background:#222}
+.product img{width:100%;height:auto;margin-bottom:10px}
+button{background:gold;color:black;padding:8px;border:none;cursor:pointer;margin-top:5px}
 footer{background:#111;color:gold;text-align:center;padding:10px;margin-top:20px}
 .modal{display:none;position:fixed;z-index:1;padding-top:100px;left:0;top:0;width:100%;height:100%;overflow:auto;background-color:rgba(0,0,0,0.9)}
 .modal-content{background-color:black;margin:auto;padding:20px;border:1px solid gold;width:80%;max-width:300px;color:gold}
 input{width:100%;padding:10px;margin:5px 0;border:1px solid gold;background:black;color:gold}
-.cart{position:fixed;top:10px;right:10px;background:gold;color:black;padding:10px;border:none;cursor:pointer}
-#cartItems{margin-top:10px}
+.cartBtn{position:fixed;top:10px;right:10px;background:gold;color:black;padding:10px;border:none;cursor:pointer}
 .langBtn{position:fixed;top:10px;left:10px;background:gold;color:black;padding:10px;border:none;cursor:pointer}
+#cartItems{display:none;position:fixed;top:50px;right:10px;width:250px;background:#111;padding:10px;color:gold;border:1px solid gold;max-height:400px;overflow:auto}
+.cartItem{border-bottom:1px solid gold;padding:5px;margin-bottom:5px;display:flex;justify-content:space-between;align-items:center}
+.quantityBtn{background:#333;color:gold;padding:2px 5px;margin:0 2px;cursor:pointer}
+.checkoutBtn{background:gold;color:black;width:100%;padding:8px;margin-top:10px;border:none;cursor:pointer}
 </style>
 </head>
 <body>
@@ -30,27 +34,31 @@ input{width:100%;padding:10px;margin:5px 0;border:1px solid gold;background:blac
 <a href="#" onclick="showLogin()" id="navLogin">Login</a>
 </nav>
 
-<button class="cart" onclick="toggleCart()" id="cartBtn">Cart (<span id="cartCount">0</span>)</button>
+<button class="cartBtn" onclick="toggleCart()" id="cartBtn">Cart (<span id="cartCount">0</span>)</button>
 <button class="langBtn" onclick="toggleLanguage()">اردو / EN</button>
-<div id="cartItems" style="display:none;background:#111;padding:10px;color:gold;position:fixed;top:50px;right:10px;width:200px;border:1px solid gold"></div>
 
-<div class="container">
-<div class="product">
-<h3 class="prodName" data-en="Watch" data-ur="گھڑی">Watch</h3>
+<div id="cartItems"></div>
+
+<div class="container" id="productsContainer">
+<div class="product" data-en="Watch" data-ur="گھڑی">
+<img src="https://via.placeholder.com/150" alt="Watch">
+<h3 class="prodName">Watch</h3>
 <p>$10</p>
-<button class="buyBtn" data-en="Buy" data-ur="خریدیں">Buy</button>
+<button class="buyBtn" onclick="addToCart(this)">Buy</button>
 </div>
 
-<div class="product">
-<h3 class="prodName" data-en="Shoes" data-ur="جوتے">Shoes</h3>
+<div class="product" data-en="Shoes" data-ur="جوتے">
+<img src="https://via.placeholder.com/150" alt="Shoes">
+<h3 class="prodName">Shoes</h3>
 <p>$20</p>
-<button class="buyBtn" data-en="Buy" data-ur="خریدیں">Buy</button>
+<button class="buyBtn" onclick="addToCart(this)">Buy</button>
 </div>
 
-<div class="product">
-<h3 class="prodName" data-en="Phone" data-ur="فون">Phone</h3>
+<div class="product" data-en="Phone" data-ur="فون">
+<img src="https://via.placeholder.com/150" alt="Phone">
+<h3 class="prodName">Phone</h3>
 <p>$50</p>
-<button class="buyBtn" data-en="Buy" data-ur="خریدیں">Buy</button>
+<button class="buyBtn" onclick="addToCart(this)">Buy</button>
 </div>
 </div>
 
@@ -71,27 +79,20 @@ input{width:100%;padding:10px;margin:5px 0;border:1px solid gold;background:blac
 // Language toggle
 var language = 'en';
 function toggleLanguage(){
-    if(language==='en') language='ur';
-    else language='en';
-
-    // Header, nav, footer
+    language = language==='en' ? 'ur' : 'en';
     document.getElementById('header').innerText = language==='en' ? 'Premium Mall Online Shop' : 'پریمیم مال آن لائن شاپ';
     document.getElementById('navHome').innerText = language==='en' ? 'Home' : 'ہوم';
     document.getElementById('navShop').innerText = language==='en' ? 'Shop' : 'شاپ';
     document.getElementById('navLogin').innerText = language==='en' ? 'Login' : 'لاگ ان';
     document.getElementById('footer').innerText = language==='en' ? 'Premium Mall © 2026' : 'پریمیم مال © 2026';
-    document.getElementById('cartBtn').innerHTML = (language==='en' ? 'Cart' : 'کارٹ') + ' (<span id="cartCount">'+cart.length+'</span>)';
-
-    // Products
+    document.getElementById('cartBtn').innerHTML = (language==='en'?'Cart':'کارٹ')+' (<span id="cartCount">'+cart.length+'</span>)';
     document.querySelectorAll('.prodName').forEach(function(el){el.innerText=el.dataset[language];});
-    document.querySelectorAll('.buyBtn').forEach(function(el){el.innerText=language==='en' ? 'Buy' : 'خریدیں';});
-
-    // Login modal
-    document.getElementById('loginTitle').innerText = language==='en' ? 'Login' : 'لاگ ان کریں';
-    document.getElementById('username').placeholder = language==='en' ? 'Username' : 'صارف نام';
-    document.getElementById('password').placeholder = language==='en' ? 'Password' : 'پاس ورڈ';
-    document.getElementById('loginBtn').innerText = language==='en' ? 'Login' : 'لاگ ان';
-    document.getElementById('closeLoginBtn').innerText = language==='en' ? 'Close' : 'بند کریں';
+    document.querySelectorAll('.buyBtn').forEach(function(el){el.innerText=language==='en'?'Buy':'خریدیں';});
+    document.getElementById('loginTitle').innerText = language==='en'?'Login':'لاگ ان کریں';
+    document.getElementById('username').placeholder = language==='en'?'Username':'صارف نام';
+    document.getElementById('password').placeholder = language==='en'?'Password':'پاس ورڈ';
+    document.getElementById('loginBtn').innerText = language==='en'?'Login':'لاگ ان';
+    document.getElementById('closeLoginBtn').innerText = language==='en'?'Close':'بند کریں';
 }
 
 // Login Functions
@@ -101,36 +102,57 @@ function login(){
   var user=document.getElementById('username').value;
   var pass=document.getElementById('password').value;
   if(user && pass){
-    alert(language==='en' ? 'Logged in as '+user : 'لاگ ان ہو گیا: '+user);
+    alert(language==='en'?'Logged in as '+user:'لاگ ان ہو گیا: '+user);
     closeLogin();
-  } else {
-    alert(language==='en' ? 'Enter username and password' : 'براہ مہربانی صارف نام اور پاس ورڈ درج کریں');
-  }
+  }else{alert(language==='en'?'Enter username and password':'براہ مہربانی صارف نام اور پاس ورڈ درج کریں');}
 }
 
-// Cart Functions
+// Cart
 var cart=[];
-function addToCart(name,price){
-  cart.push({name:name,price:price});
-  document.getElementById('cartCount').innerText=cart.length;
-  alert(language==='en' ? name+' added to cart' : name+' کارٹ میں شامل');
-  showCart();
+function addToCart(btn){
+    var productDiv = btn.parentElement;
+    var name = productDiv.dataset[language];
+    var price = parseFloat(productDiv.querySelector('p').innerText.replace('$',''));
+    var existing = cart.find(item=>item.name===name);
+    if(existing){existing.qty++;}
+    else{cart.push({name:name,price:price,qty:1});}
+    updateCart();
 }
+
+function updateCart(){
+    document.getElementById('cartCount').innerText = cart.reduce((a,b)=>a+b.qty,0);
+    var cartDiv = document.getElementById('cartItems');
+    cartDiv.innerHTML = '';
+    var total = 0;
+    cart.forEach(function(item,index){
+        total+=item.price*item.qty;
+        var div = document.createElement('div');
+        div.className='cartItem';
+        div.innerHTML = `<span>${item.name} - $${item.price} x ${item.qty}</span>
+                         <span>
+                         <button class="quantityBtn" onclick="changeQty(${index},-1)">-</button>
+                         <button class="quantityBtn" onclick="changeQty(${index},1)">+</button>
+                         </span>`;
+        cartDiv.appendChild(div);
+    });
+    if(cart.length>0){
+        var checkout = document.createElement('button');
+        checkout.className='checkoutBtn';
+        checkout.innerText = language==='en'?'Checkout':'چیک آؤٹ';
+        checkout.onclick=function(){alert(language==='en'?'Proceed to payment':'ادائیگی کے لیے آگے بڑھیں');};
+        cartDiv.appendChild(checkout);
+    }
+}
+
 function toggleCart(){
-  var elem=document.getElementById('cartItems');
-  if(elem.style.display==='none') elem.style.display='block';
-  else elem.style.display='none';
+    var elem=document.getElementById('cartItems');
+    elem.style.display = elem.style.display==='block'?'none':'block';
 }
-function showCart(){
-  var elem=document.getElementById('cartItems');
-  elem.style.display='block';
-  elem.innerHTML='';
-  var total=0;
-  cart.forEach(function(item){
-    elem.innerHTML+='<p>'+item.name+' - $'+item.price+'</p>';
-    total+=item.price;
-  });
-  elem.innerHTML+='<p><b>'+(language==='en'?'Total':'کل')+': $'+total+'</b></p>';
+
+function changeQty(index,delta){
+    cart[index].qty += delta;
+    if(cart[index].qty<=0) cart.splice(index,1);
+    updateCart();
 }
 </script>
 
