@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Premium Mall</title>
+<title>پریمیم مال</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 body{margin:0;font-family:Arial;background:black;color:gold}
@@ -12,43 +12,103 @@ nav a{color:gold;margin:10px;text-decoration:none;font-size:18px}
 .product{border:1px solid gold;margin:15px;padding:15px;width:200px;text-align:center}
 button{background:gold;color:black;padding:8px;border:none;cursor:pointer}
 footer{background:#111;color:gold;text-align:center;padding:10px;margin-top:20px}
+.modal{display:none;position:fixed;z-index:1;padding-top:100px;left:0;top:0;width:100%;height:100%;overflow:auto;background-color:rgba(0,0,0,0.9)}
+.modal-content{background-color:black;margin:auto;padding:20px;border:1px solid gold;width:80%;max-width:300px;color:gold}
+input{width:100%;padding:10px;margin:5px 0;border:1px solid gold;background:black;color:gold}
+.cart{position:fixed;top:10px;right:10px;background:gold;color:black;padding:10px;border:none;cursor:pointer}
+#cartItems{margin-top:10px}
 </style>
 </head>
 <body>
 
-<header>Premium Mall Online Shop</header>
+<header>پریمیم مال آن لائن شاپ</header>
 
 <nav>
-<a href="#">Home</a>
-<a href="#">Shop</a>
-<a href="#">Contact</a>
+<a href="#">ہوم</a>
+<a href="#">شاپ</a>
+<a href="#" onclick="showLogin()">لاگ ان</a>
 </nav>
+
+<button class="cart" onclick="toggleCart()">کارٹ (<span id="cartCount">0</span>)</button>
+<div id="cartItems" style="display:none;background:#111;padding:10px;color:gold;position:fixed;top:50px;right:10px;width:200px;border:1px solid gold"></div>
 
 <div class="container">
 
 <div class="product">
-<h3>Watch</h3>
+<h3>گھڑی</h3>
 <p>$10</p>
-<button>Buy</button>
+<button onclick="addToCart('گھڑی',10)">خریدیں</button>
 </div>
 
 <div class="product">
-<h3>Shoes</h3>
+<h3>جوتے</h3>
 <p>$20</p>
-<button>Buy</button>
+<button onclick="addToCart('جوتے',20)">خریدیں</button>
 </div>
 
 <div class="product">
-<h3>Phone</h3>
+<h3>فون</h3>
 <p>$50</p>
-<button>Buy</button>
+<button onclick="addToCart('فون',50)">خریدیں</button>
 </div>
 
 </div>
 
 <footer>
-Premium Mall © 2026
+پریمیم مال © 2026
 </footer>
+
+<!-- Login Modal -->
+<div id="loginModal" class="modal">
+  <div class="modal-content">
+    <h3>لاگ ان کریں</h3>
+    <input type="text" id="username" placeholder="صارف نام">
+    <input type="password" id="password" placeholder="پاس ورڈ">
+    <button onclick="login()">لاگ ان</button>
+    <button onclick="closeLogin()">بند کریں</button>
+  </div>
+</div>
+
+<script>
+// Login Functions
+function showLogin(){document.getElementById('loginModal').style.display='block'}
+function closeLogin(){document.getElementById('loginModal').style.display='none'}
+function login(){
+  var user=document.getElementById('username').value;
+  var pass=document.getElementById('password').value;
+  if(user && pass){
+    alert('لاگ ان ہو گیا: '+user);
+    closeLogin();
+  } else {
+    alert('براہ مہربانی صارف نام اور پاس ورڈ درج کریں');
+  }
+}
+
+// Cart Functions
+var cart=[];
+function addToCart(name,price){
+  cart.push({name:name,price:price});
+  document.getElementById('cartCount').innerText=cart.length;
+  alert(name+' کارٹ میں شامل');
+  showCart();
+}
+function toggleCart(){
+  var elem=document.getElementById('cartItems');
+  if(elem.style.display==='none') elem.style.display='block';
+  else elem.style.display='none';
+}
+function showCart(){
+  var elem=document.getElementById('cartItems');
+  elem.style.display='block';
+  elem.innerHTML='';
+  var total=0;
+  cart.forEach(function(item){
+    elem.innerHTML+='<p>'+item.name+' - $'+item.price+'</p>';
+    total+=item.price;
+  });
+  elem.innerHTML+='<p><b>کل: $'+total+'</b></p>';
+}
+</script>
 
 </body>
 </html>
