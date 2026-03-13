@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>پریمیم مال</title>
+<title>Premium Mall / پریمیم مال</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 body{margin:0;font-family:Arial;background:black;color:gold}
@@ -17,59 +17,83 @@ footer{background:#111;color:gold;text-align:center;padding:10px;margin-top:20px
 input{width:100%;padding:10px;margin:5px 0;border:1px solid gold;background:black;color:gold}
 .cart{position:fixed;top:10px;right:10px;background:gold;color:black;padding:10px;border:none;cursor:pointer}
 #cartItems{margin-top:10px}
+.langBtn{position:fixed;top:10px;left:10px;background:gold;color:black;padding:10px;border:none;cursor:pointer}
 </style>
 </head>
 <body>
 
-<header>پریمیم مال آن لائن شاپ</header>
+<header id="header">Premium Mall Online Shop</header>
 
 <nav>
-<a href="#">ہوم</a>
-<a href="#">شاپ</a>
-<a href="#" onclick="showLogin()">لاگ ان</a>
+<a href="#" id="navHome">Home</a>
+<a href="#" id="navShop">Shop</a>
+<a href="#" onclick="showLogin()" id="navLogin">Login</a>
 </nav>
 
-<button class="cart" onclick="toggleCart()">کارٹ (<span id="cartCount">0</span>)</button>
+<button class="cart" onclick="toggleCart()" id="cartBtn">Cart (<span id="cartCount">0</span>)</button>
+<button class="langBtn" onclick="toggleLanguage()">اردو / EN</button>
 <div id="cartItems" style="display:none;background:#111;padding:10px;color:gold;position:fixed;top:50px;right:10px;width:200px;border:1px solid gold"></div>
 
 <div class="container">
-
 <div class="product">
-<h3>گھڑی</h3>
+<h3 class="prodName" data-en="Watch" data-ur="گھڑی">Watch</h3>
 <p>$10</p>
-<button onclick="addToCart('گھڑی',10)">خریدیں</button>
+<button class="buyBtn" data-en="Buy" data-ur="خریدیں">Buy</button>
 </div>
 
 <div class="product">
-<h3>جوتے</h3>
+<h3 class="prodName" data-en="Shoes" data-ur="جوتے">Shoes</h3>
 <p>$20</p>
-<button onclick="addToCart('جوتے',20)">خریدیں</button>
+<button class="buyBtn" data-en="Buy" data-ur="خریدیں">Buy</button>
 </div>
 
 <div class="product">
-<h3>فون</h3>
+<h3 class="prodName" data-en="Phone" data-ur="فون">Phone</h3>
 <p>$50</p>
-<button onclick="addToCart('فون',50)">خریدیں</button>
+<button class="buyBtn" data-en="Buy" data-ur="خریدیں">Buy</button>
+</div>
 </div>
 
-</div>
-
-<footer>
-پریمیم مال © 2026
-</footer>
+<footer id="footer">Premium Mall © 2026</footer>
 
 <!-- Login Modal -->
 <div id="loginModal" class="modal">
   <div class="modal-content">
-    <h3>لاگ ان کریں</h3>
-    <input type="text" id="username" placeholder="صارف نام">
-    <input type="password" id="password" placeholder="پاس ورڈ">
-    <button onclick="login()">لاگ ان</button>
-    <button onclick="closeLogin()">بند کریں</button>
+    <h3 id="loginTitle">Login</h3>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()" id="loginBtn">Login</button>
+    <button onclick="closeLogin()" id="closeLoginBtn">Close</button>
   </div>
 </div>
 
 <script>
+// Language toggle
+var language = 'en';
+function toggleLanguage(){
+    if(language==='en') language='ur';
+    else language='en';
+
+    // Header, nav, footer
+    document.getElementById('header').innerText = language==='en' ? 'Premium Mall Online Shop' : 'پریمیم مال آن لائن شاپ';
+    document.getElementById('navHome').innerText = language==='en' ? 'Home' : 'ہوم';
+    document.getElementById('navShop').innerText = language==='en' ? 'Shop' : 'شاپ';
+    document.getElementById('navLogin').innerText = language==='en' ? 'Login' : 'لاگ ان';
+    document.getElementById('footer').innerText = language==='en' ? 'Premium Mall © 2026' : 'پریمیم مال © 2026';
+    document.getElementById('cartBtn').innerHTML = (language==='en' ? 'Cart' : 'کارٹ') + ' (<span id="cartCount">'+cart.length+'</span>)';
+
+    // Products
+    document.querySelectorAll('.prodName').forEach(function(el){el.innerText=el.dataset[language];});
+    document.querySelectorAll('.buyBtn').forEach(function(el){el.innerText=language==='en' ? 'Buy' : 'خریدیں';});
+
+    // Login modal
+    document.getElementById('loginTitle').innerText = language==='en' ? 'Login' : 'لاگ ان کریں';
+    document.getElementById('username').placeholder = language==='en' ? 'Username' : 'صارف نام';
+    document.getElementById('password').placeholder = language==='en' ? 'Password' : 'پاس ورڈ';
+    document.getElementById('loginBtn').innerText = language==='en' ? 'Login' : 'لاگ ان';
+    document.getElementById('closeLoginBtn').innerText = language==='en' ? 'Close' : 'بند کریں';
+}
+
 // Login Functions
 function showLogin(){document.getElementById('loginModal').style.display='block'}
 function closeLogin(){document.getElementById('loginModal').style.display='none'}
@@ -77,10 +101,10 @@ function login(){
   var user=document.getElementById('username').value;
   var pass=document.getElementById('password').value;
   if(user && pass){
-    alert('لاگ ان ہو گیا: '+user);
+    alert(language==='en' ? 'Logged in as '+user : 'لاگ ان ہو گیا: '+user);
     closeLogin();
   } else {
-    alert('براہ مہربانی صارف نام اور پاس ورڈ درج کریں');
+    alert(language==='en' ? 'Enter username and password' : 'براہ مہربانی صارف نام اور پاس ورڈ درج کریں');
   }
 }
 
@@ -89,7 +113,7 @@ var cart=[];
 function addToCart(name,price){
   cart.push({name:name,price:price});
   document.getElementById('cartCount').innerText=cart.length;
-  alert(name+' کارٹ میں شامل');
+  alert(language==='en' ? name+' added to cart' : name+' کارٹ میں شامل');
   showCart();
 }
 function toggleCart(){
@@ -106,7 +130,7 @@ function showCart(){
     elem.innerHTML+='<p>'+item.name+' - $'+item.price+'</p>';
     total+=item.price;
   });
-  elem.innerHTML+='<p><b>کل: $'+total+'</b></p>';
+  elem.innerHTML+='<p><b>'+(language==='en'?'Total':'کل')+': $'+total+'</b></p>';
 }
 </script>
 
