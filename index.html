@@ -1,159 +1,274 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Premium Mall / پریمیم مال</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PREMIUM MALL</title>
+
 <style>
-body{margin:0;font-family:Arial;background:black;color:gold}
-header{background:black;padding:15px;text-align:center;font-size:28px;border-bottom:2px solid gold}
-nav{background:#111;padding:10px;text-align:center}
-nav a{color:gold;margin:10px;text-decoration:none;font-size:18px}
-.container{display:flex;flex-wrap:wrap;justify-content:center}
-.product{border:1px solid gold;margin:15px;padding:15px;width:200px;text-align:center;background:#222}
-.product img{width:100%;height:auto;margin-bottom:10px}
-button{background:gold;color:black;padding:8px;border:none;cursor:pointer;margin-top:5px}
-footer{background:#111;color:gold;text-align:center;padding:10px;margin-top:20px}
-.modal{display:none;position:fixed;z-index:1;padding-top:100px;left:0;top:0;width:100%;height:100%;overflow:auto;background-color:rgba(0,0,0,0.9)}
-.modal-content{background-color:black;margin:auto;padding:20px;border:1px solid gold;width:80%;max-width:300px;color:gold}
-input{width:100%;padding:10px;margin:5px 0;border:1px solid gold;background:black;color:gold}
-.cartBtn{position:fixed;top:10px;right:10px;background:gold;color:black;padding:10px;border:none;cursor:pointer}
-.langBtn{position:fixed;top:10px;left:10px;background:gold;color:black;padding:10px;border:none;cursor:pointer}
-#cartItems{display:none;position:fixed;top:50px;right:10px;width:250px;background:#111;padding:10px;color:gold;border:1px solid gold;max-height:400px;overflow:auto}
-.cartItem{border-bottom:1px solid gold;padding:5px;margin-bottom:5px;display:flex;justify-content:space-between;align-items:center}
-.quantityBtn{background:#333;color:gold;padding:2px 5px;margin:0 2px;cursor:pointer}
-.checkoutBtn{background:gold;color:black;width:100%;padding:8px;margin-top:10px;border:none;cursor:pointer}
+
+body{
+font-family:Arial;
+margin:0;
+background:#f5f5f5;
+}
+
+header{
+background:#0a58ca;
+color:white;
+padding:15px;
+text-align:center;
+}
+
+nav{
+background:#222;
+padding:10px;
+text-align:center;
+}
+
+nav a{
+color:white;
+margin:10px;
+text-decoration:none;
+font-weight:bold;
+}
+
+.search{
+text-align:center;
+margin:20px;
+}
+
+input{
+padding:10px;
+width:250px;
+}
+
+.products{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+}
+
+.card{
+background:white;
+margin:15px;
+padding:15px;
+width:200px;
+border-radius:10px;
+text-align:center;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+button{
+background:#0a58ca;
+color:white;
+border:none;
+padding:10px;
+border-radius:5px;
+cursor:pointer;
+margin-top:5px;
+}
+
+.cart{
+position:fixed;
+right:10px;
+top:80px;
+background:white;
+padding:15px;
+width:220px;
+box-shadow:0 0 10px rgba(0,0,0,0.2);
+}
+
+footer{
+background:#222;
+color:white;
+text-align:center;
+padding:10px;
+margin-top:40px;
+}
+
+form{
+text-align:center;
+margin-top:40px;
+}
+
+textarea{
+width:250px;
+height:70px;
+}
+
 </style>
+
 </head>
+
 <body>
 
-<header id="header">Premium Mall Online Shop</header>
+<header>
+<h1>PREMIUM MALL STORE</h1>
+</header>
 
 <nav>
-<a href="#" id="navHome">Home</a>
-<a href="#" id="navShop">Shop</a>
-<a href="#" onclick="showLogin()" id="navLogin">Login</a>
+<a href="#">Home</a>
+<a href="#">Shop</a>
+<a href="#">Categories</a>
+<a href="#">Contact</a>
 </nav>
 
-<button class="cartBtn" onclick="toggleCart()" id="cartBtn">Cart (<span id="cartCount">0</span>)</button>
-<button class="langBtn" onclick="toggleLanguage()">اردو / EN</button>
+<div class="search">
+<input type="text" id="search" placeholder="Search product..." onkeyup="searchProduct()">
+</div>
+
+<h2 style="text-align:center;">Products</h2>
+
+<div class="products" id="productList">
+
+<div class="card">
+<img src="https://via.placeholder.com/150">
+<h3>Smart Watch</h3>
+<p>Rs 2500</p>
+<button onclick="addToCart('Smart Watch',2500)">Add to Cart</button>
+
+<a href="https://wa.me/923181668155?text=I want to order Smart Watch" target="_blank">
+<button>Order on WhatsApp</button>
+</a>
+
+</div>
+
+<div class="card">
+<img src="https://via.placeholder.com/150">
+<h3>Men Shoes</h3>
+<p>Rs 3000</p>
+<button onclick="addToCart('Men Shoes',3000)">Add to Cart</button>
+
+<a href="https://wa.me/923181668155?text=I want to order Men Shoes" target="_blank">
+<button>Order on WhatsApp</button>
+</a>
+
+</div>
+
+<div class="card">
+<img src="https://via.placeholder.com/150">
+<h3>Wireless Earbuds</h3>
+<p>Rs 1800</p>
+<button onclick="addToCart('Earbuds',1800)">Add to Cart</button>
+
+<a href="https://wa.me/923181668155?text=I want to order Earbuds" target="_blank">
+<button>Order on WhatsApp</button>
+</a>
+
+</div>
+
+</div>
+
+<div class="cart">
+
+<h3>Cart</h3>
 
 <div id="cartItems"></div>
 
-<div class="container" id="productsContainer">
-<div class="product" data-en="Watch" data-ur="گھڑی">
-<img src="https://via.placeholder.com/150" alt="Watch">
-<h3 class="prodName">Watch</h3>
-<p>$10</p>
-<button class="buyBtn" onclick="addToCart(this)">Buy</button>
+<p>Total: Rs <span id="total">0</span></p>
+
+<button onclick="clearCart()">Clear</button>
+
 </div>
 
-<div class="product" data-en="Shoes" data-ur="جوتے">
-<img src="https://via.placeholder.com/150" alt="Shoes">
-<h3 class="prodName">Shoes</h3>
-<p>$20</p>
-<button class="buyBtn" onclick="addToCart(this)">Buy</button>
-</div>
+<h2 style="text-align:center;">Checkout</h2>
 
-<div class="product" data-en="Phone" data-ur="فون">
-<img src="https://via.placeholder.com/150" alt="Phone">
-<h3 class="prodName">Phone</h3>
-<p>$50</p>
-<button class="buyBtn" onclick="addToCart(this)">Buy</button>
-</div>
-</div>
+<form>
 
-<footer id="footer">Premium Mall © 2026</footer>
+<input type="text" placeholder="Your Name"><br><br>
 
-<!-- Login Modal -->
-<div id="loginModal" class="modal">
-  <div class="modal-content">
-    <h3 id="loginTitle">Login</h3>
-    <input type="text" id="username" placeholder="Username">
-    <input type="password" id="password" placeholder="Password">
-    <button onclick="login()" id="loginBtn">Login</button>
-    <button onclick="closeLogin()" id="closeLoginBtn">Close</button>
-  </div>
-</div>
+<input type="text" placeholder="Phone Number"><br><br>
+
+<input type="text" placeholder="City"><br><br>
+
+<textarea placeholder="Address"></textarea><br><br>
+
+<select>
+
+<option>Cash on Delivery</option>
+
+<option>Easypaisa</option>
+
+<option>JazzCash</option>
+
+</select>
+
+<br><br>
+
+<button type="submit">Submit Order</button>
+
+</form>
+
+<footer>
+
+<p>© 2026 Premium Mall Pakistan</p>
+
+</footer>
 
 <script>
-// Language toggle
-var language = 'en';
-function toggleLanguage(){
-    language = language==='en' ? 'ur' : 'en';
-    document.getElementById('header').innerText = language==='en' ? 'Premium Mall Online Shop' : 'پریمیم مال آن لائن شاپ';
-    document.getElementById('navHome').innerText = language==='en' ? 'Home' : 'ہوم';
-    document.getElementById('navShop').innerText = language==='en' ? 'Shop' : 'شاپ';
-    document.getElementById('navLogin').innerText = language==='en' ? 'Login' : 'لاگ ان';
-    document.getElementById('footer').innerText = language==='en' ? 'Premium Mall © 2026' : 'پریمیم مال © 2026';
-    document.getElementById('cartBtn').innerHTML = (language==='en'?'Cart':'کارٹ')+' (<span id="cartCount">'+cart.length+'</span>)';
-    document.querySelectorAll('.prodName').forEach(function(el){el.innerText=el.dataset[language];});
-    document.querySelectorAll('.buyBtn').forEach(function(el){el.innerText=language==='en'?'Buy':'خریدیں';});
-    document.getElementById('loginTitle').innerText = language==='en'?'Login':'لاگ ان کریں';
-    document.getElementById('username').placeholder = language==='en'?'Username':'صارف نام';
-    document.getElementById('password').placeholder = language==='en'?'Password':'پاس ورڈ';
-    document.getElementById('loginBtn').innerText = language==='en'?'Login':'لاگ ان';
-    document.getElementById('closeLoginBtn').innerText = language==='en'?'Close':'بند کریں';
+
+let cart=[]
+let total=0
+
+function addToCart(name,price){
+
+cart.push({name,price})
+
+total+=price
+
+displayCart()
+
 }
 
-// Login Functions
-function showLogin(){document.getElementById('loginModal').style.display='block'}
-function closeLogin(){document.getElementById('loginModal').style.display='none'}
-function login(){
-  var user=document.getElementById('username').value;
-  var pass=document.getElementById('password').value;
-  if(user && pass){
-    alert(language==='en'?'Logged in as '+user:'لاگ ان ہو گیا: '+user);
-    closeLogin();
-  }else{alert(language==='en'?'Enter username and password':'براہ مہربانی صارف نام اور پاس ورڈ درج کریں');}
+function displayCart(){
+
+let cartHTML=""
+
+cart.forEach(item=>{
+
+cartHTML+=item.name+" - Rs "+item.price+"<br>"
+
+})
+
+document.getElementById("cartItems").innerHTML=cartHTML
+
+document.getElementById("total").innerText=total
+
 }
 
-// Cart
-var cart=[];
-function addToCart(btn){
-    var productDiv = btn.parentElement;
-    var name = productDiv.dataset[language];
-    var price = parseFloat(productDiv.querySelector('p').innerText.replace('$',''));
-    var existing = cart.find(item=>item.name===name);
-    if(existing){existing.qty++;}
-    else{cart.push({name:name,price:price,qty:1});}
-    updateCart();
+function clearCart(){
+
+cart=[]
+
+total=0
+
+displayCart()
+
 }
 
-function updateCart(){
-    document.getElementById('cartCount').innerText = cart.reduce((a,b)=>a+b.qty,0);
-    var cartDiv = document.getElementById('cartItems');
-    cartDiv.innerHTML = '';
-    var total = 0;
-    cart.forEach(function(item,index){
-        total+=item.price*item.qty;
-        var div = document.createElement('div');
-        div.className='cartItem';
-        div.innerHTML = `<span>${item.name} - $${item.price} x ${item.qty}</span>
-                         <span>
-                         <button class="quantityBtn" onclick="changeQty(${index},-1)">-</button>
-                         <button class="quantityBtn" onclick="changeQty(${index},1)">+</button>
-                         </span>`;
-        cartDiv.appendChild(div);
-    });
-    if(cart.length>0){
-        var checkout = document.createElement('button');
-        checkout.className='checkoutBtn';
-        checkout.innerText = language==='en'?'Checkout':'چیک آؤٹ';
-        checkout.onclick=function(){alert(language==='en'?'Proceed to payment':'ادائیگی کے لیے آگے بڑھیں');};
-        cartDiv.appendChild(checkout);
-    }
+function searchProduct(){
+
+let input=document.getElementById("search").value.toLowerCase()
+
+let cards=document.getElementsByClassName("card")
+
+for(let i=0;i<cards.length;i++){
+
+let title=cards[i].getElementsByTagName("h3")[0]
+
+if(title.innerText.toLowerCase().indexOf(input)>-1){
+
+cards[i].style.display="block"
+
+}else{
+
+cards[i].style.display="none"
+
 }
 
-function toggleCart(){
-    var elem=document.getElementById('cartItems');
-    elem.style.display = elem.style.display==='block'?'none':'block';
 }
 
-function changeQty(index,delta){
-    cart[index].qty += delta;
-    if(cart[index].qty<=0) cart.splice(index,1);
-    updateCart();
 }
+
 </script>
 
 </body>
