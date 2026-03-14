@@ -41,6 +41,15 @@ padding:10px;
 width:250px;
 }
 
+.categories{
+text-align:center;
+margin-bottom:20px;
+}
+
+.categories button{
+margin:5px;
+}
+
 .products{
 display:flex;
 flex-wrap:wrap;
@@ -70,10 +79,10 @@ margin-top:5px;
 .cart{
 position:fixed;
 right:10px;
-top:80px;
+top:90px;
 background:white;
 padding:15px;
-width:220px;
+width:230px;
 box-shadow:0 0 10px rgba(0,0,0,0.2);
 }
 
@@ -83,16 +92,6 @@ color:white;
 text-align:center;
 padding:10px;
 margin-top:40px;
-}
-
-form{
-text-align:center;
-margin-top:40px;
-}
-
-textarea{
-width:250px;
-height:70px;
 }
 
 </style>
@@ -116,26 +115,22 @@ height:70px;
 <input type="text" id="search" placeholder="Search product..." onkeyup="searchProduct()">
 </div>
 
-<h2 style="text-align:center;">Products</h2>
+<div class="categories">
 
-<div class="products" id="productList">
-
-<div class="card">
-<img src="https://via.placeholder.com/150">
-<h3>Smart Watch</h3>
-<p>Rs 2500</p>
-<button onclick="addToCart('Smart Watch',2500)">Add to Cart</button>
-
-<a href="https://wa.me/923181668155?text=I want to order Smart Watch" target="_blank">
-<button>Order on WhatsApp</button>
-</a>
+<button onclick="filterCategory('all')">All</button>
+<button onclick="filterCategory('fashion')">Fashion</button>
+<button onclick="filterCategory('electronics')">Electronics</button>
 
 </div>
 
-<div class="card">
+<div class="products" id="productList">
+
+<div class="card fashion">
 <img src="https://via.placeholder.com/150">
 <h3>Men Shoes</h3>
+<p>⭐⭐⭐⭐☆</p>
 <p>Rs 3000</p>
+
 <button onclick="addToCart('Men Shoes',3000)">Add to Cart</button>
 
 <a href="https://wa.me/923181668155?text=I want to order Men Shoes" target="_blank">
@@ -144,10 +139,26 @@ height:70px;
 
 </div>
 
-<div class="card">
+<div class="card electronics">
+<img src="https://via.placeholder.com/150">
+<h3>Smart Watch</h3>
+<p>⭐⭐⭐⭐⭐</p>
+<p>Rs 2500</p>
+
+<button onclick="addToCart('Smart Watch',2500)">Add to Cart</button>
+
+<a href="https://wa.me/923181668155?text=I want to order Smart Watch" target="_blank">
+<button>Order on WhatsApp</button>
+</a>
+
+</div>
+
+<div class="card electronics">
 <img src="https://via.placeholder.com/150">
 <h3>Wireless Earbuds</h3>
+<p>⭐⭐⭐⭐☆</p>
 <p>Rs 1800</p>
+
 <button onclick="addToCart('Earbuds',1800)">Add to Cart</button>
 
 <a href="https://wa.me/923181668155?text=I want to order Earbuds" target="_blank">
@@ -160,7 +171,7 @@ height:70px;
 
 <div class="cart">
 
-<h3>Cart</h3>
+<h3>Your Cart</h3>
 
 <div id="cartItems"></div>
 
@@ -170,38 +181,8 @@ height:70px;
 
 </div>
 
-<h2 style="text-align:center;">Checkout</h2>
-
-<form>
-
-<input type="text" placeholder="Your Name"><br><br>
-
-<input type="text" placeholder="Phone Number"><br><br>
-
-<input type="text" placeholder="City"><br><br>
-
-<textarea placeholder="Address"></textarea><br><br>
-
-<select>
-
-<option>Cash on Delivery</option>
-
-<option>Easypaisa</option>
-
-<option>JazzCash</option>
-
-</select>
-
-<br><br>
-
-<button type="submit">Submit Order</button>
-
-</form>
-
 <footer>
-
 <p>© 2026 Premium Mall Pakistan</p>
-
 </footer>
 
 <script>
@@ -224,13 +205,10 @@ function displayCart(){
 let cartHTML=""
 
 cart.forEach(item=>{
-
 cartHTML+=item.name+" - Rs "+item.price+"<br>"
-
 })
 
 document.getElementById("cartItems").innerHTML=cartHTML
-
 document.getElementById("total").innerText=total
 
 }
@@ -238,9 +216,7 @@ document.getElementById("total").innerText=total
 function clearCart(){
 
 cart=[]
-
 total=0
-
 displayCart()
 
 }
@@ -248,7 +224,6 @@ displayCart()
 function searchProduct(){
 
 let input=document.getElementById("search").value.toLowerCase()
-
 let cards=document.getElementsByClassName("card")
 
 for(let i=0;i<cards.length;i++){
@@ -260,6 +235,34 @@ if(title.innerText.toLowerCase().indexOf(input)>-1){
 cards[i].style.display="block"
 
 }else{
+
+cards[i].style.display="none"
+
+}
+
+}
+
+}
+
+function filterCategory(category){
+
+let cards=document.getElementsByClassName("card")
+
+for(let i=0;i<cards.length;i++){
+
+if(category=="all"){
+
+cards[i].style.display="block"
+
+}
+
+else if(cards[i].classList.contains(category)){
+
+cards[i].style.display="block"
+
+}
+
+else{
 
 cards[i].style.display="none"
 
